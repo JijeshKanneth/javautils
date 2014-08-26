@@ -1,5 +1,0 @@
-package com.rxp.util.ui;
-
-public interface CellDefinition {
-	public String define(Object obj);
-}
