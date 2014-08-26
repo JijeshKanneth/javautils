@@ -122,7 +122,7 @@ public class JDBCTemplate {
 
     public List<Object> queryForList(String query, Object [] params,Class<?> beanClass) throws Exception{
         try {
-        	
+            final int SQL_BLOB_CONSTANT = 2004;	
             openConnection();
             createStatement(query);
             populateParams(params);
@@ -132,7 +132,11 @@ public class JDBCTemplate {
             while(rs.next()){
                 Object bean = beanClass.newInstance();
                 for(int i = 1; i <= rsmd.getColumnCount(); i++){
-                    BeanUtils.setProperty(bean, rsmd.getColumnName(i).toLowerCase(), rs.getObject(rsmd.getColumnName(i)));
+	        	if(rsmd.getColumnType(i) == SQL_BLOB_CONSTANT){ 
+	        		BeanUtils.setProperty(bean, rsmd.getColumnName(i).toLowerCase(), rs.getBytes(rsmd.getColumnName(i)));
+	        	}else{
+	        		BeanUtils.setProperty(bean, rsmd.getColumnName(i).toLowerCase(), rs.getObject(rsmd.getColumnName(i)));
+	        	}
             	}
                 
         	list.add(bean);
@@ -199,6 +203,11 @@ public class JDBCTemplate {
                 this.pst.setDouble(i, (Double)object);
             }else if(object instanceof Boolean){
                 this.pst.setBoolean(i, (Boolean) object);
+            }else if(object instanceof byte[]){
+                this.pst.setBytes(i, (byte[]) object);
+            }else if(object instanceof FileInputStream){
+            	FileInputStream fin = (FileInputStream) object;
+            	this.pst.setBinaryStream(i, fin);
             }
         }
         }
