@@ -93,23 +93,28 @@ public class Grid {
 		}
 		thead.appendChild(header);
 		Tbody tbody = new Tbody();
-		for(Object obj : this.beans){
+		if(null == this.beans){
 			Tr row = new Tr();
-			for(String getter : this.getters){
-				Td cell = new Td();
-				cell.appendText(String.valueOf(rw.invoke(obj, GETTER_PREFIX + getter)));
-				row.appendChild(cell);
-			}
-			if(null != this.additionalColumns){
-				List<Object> values = new ArrayList<Object>(this.additionalColumns.values());
-				for(Object value : values){
-					CellDefinition definition = (CellDefinition) value;
-					Td cell = new Td();
-					cell.appendText( (null != definition ? definition.define(obj) : "") );
-					row.appendChild(cell);		
-				}
-			}
 			tbody.appendChild(row);
+		}else{
+			for(Object obj : this.beans){
+				Tr row = new Tr();
+				for(String getter : this.getters){
+					Td cell = new Td();
+					cell.appendText(String.valueOf(rw.invoke(obj, GETTER_PREFIX + getter)));
+					row.appendChild(cell);
+				}
+				if(null != this.additionalColumns){
+					List<Object> values = new ArrayList<Object>(this.additionalColumns.values());
+					for(Object value : values){
+						CellDefinition definition = (CellDefinition) value;
+						Td cell = new Td();
+						cell.appendText( (null != definition ? definition.define(obj) : "") );
+						row.appendChild(cell);		
+					}
+				}
+				tbody.appendChild(row);
+			}
 		}
 		this.table.appendChild(thead);
 		this.table.appendChild(tbody);	
