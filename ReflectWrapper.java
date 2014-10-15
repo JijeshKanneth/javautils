@@ -33,10 +33,15 @@ public class ReflectWrapper {
 	
 	private Constructor findConstructor(Class className, Object[] params) {
 		Constructor [] cons = className.getDeclaredConstructors();
+		boolean isNullParam = (null == params || params.length == 0);
 		for(Constructor c : cons){
 			Class [] args = c.getParameterTypes();
 			int noOfArgs = args.length;
-			if(noOfArgs == params.length){
+			if(noOfArgs == 0 && isNullParam){
+				return c;
+			}
+			
+			if(!isNullParam && noOfArgs == params.length){
 				boolean found = true;
 				for(int i = 0; i < noOfArgs; i++){
 					if(TypeUtils.getWrapper(args[i]) != params[i].getClass() && !args[i].isInstance(params[i])){
