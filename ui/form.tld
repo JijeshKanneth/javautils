@@ -1,0 +1,33 @@
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+   "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<!-- a tab library descriptor -->
+<taglib xmlns="http://java.sun.com/JSP/TagLibraryDescriptor">
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>1.2</jsp-version>
+	<short-name>JSP Form Tag</short-name>
+
+	<!-- this tag manipulates its body content by converting it to upper case -->
+	<tag>
+		<name>form</name>
+		<tag-class>com.rxp.util.ui.Form</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>action</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>id</name>
+		</attribute>
+		<attribute>
+			<name>model</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>
