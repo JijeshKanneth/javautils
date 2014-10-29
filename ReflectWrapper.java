@@ -90,7 +90,7 @@ public class ReflectWrapper {
 				if(noOfArgs == params.length){
 					boolean found = true;
 					for(int i = 0; i < noOfArgs; i++){
-						if(TypeUtils.getWrapper(args[i]) != params[i].getClass()){
+						if(TypeUtils.getWrapper(args[i]) != params[i].getClass() && !args[i].isInstance(params[i])){
 							found = false;
 						}
 					}
