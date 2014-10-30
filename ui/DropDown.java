@@ -36,6 +36,12 @@ public class DropDown{
 		this.select.setMultiple(isMultiple ? "true" : "false");
 	}
 	
+	public void addOption(String value, String text){
+		Option opt = new Option();
+		opt.setValue(value);
+		opt.appendChild( new Text(text) );
+		this.select.appendChild( opt );
+	}
 	
 	public void addOptions(List<?> beans, String valueFeild, String textFeild){
 		addOptions(beans, valueFeild, textFeild, null);
