@@ -18,7 +18,7 @@ public class DropDown{
 		this(null,name);
 	}
 	
-	public DropDown(String id, String name){
+	public DropDown(String name, String id){
 		this.select = new Select();
 		if(StringUtils.isNotBlank(id)) this.select.setId(id);
 		if(StringUtils.isNotBlank(name)) this.select.setName(name);
