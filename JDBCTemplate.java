@@ -95,7 +95,7 @@ public class JDBCTemplate {
         }
     }     
     
-    public Object query(String query, Object [] params,Class<?> beanClass) throws Exception{
+    public <T> T query(String query, Object [] params,Class<T> beanClass) throws Exception{
         try {
             openConnection();
             createStatement(query);
@@ -103,7 +103,7 @@ public class JDBCTemplate {
             
             this.rs = this.pst.executeQuery();
             ResultSetMetaData rsmd = (ResultSetMetaData) this.rs.getMetaData();
-            Object bean = null;
+            T bean = null;
             if (rs.next()) {
             	bean = beanClass.newInstance();
                 do {
@@ -120,7 +120,7 @@ public class JDBCTemplate {
         }
     }    
 
-    public List<Object> queryForList(String query, Object [] params,Class<?> beanClass) throws Exception{
+    public <T> List<T> queryForList(String query, Object [] params,Class<T> beanClass) throws Exception{
         try {
             final int SQL_BLOB_CONSTANT = 2004;	
             openConnection();
@@ -128,9 +128,9 @@ public class JDBCTemplate {
             populateParams(params);
             this.rs = this.pst.executeQuery();
             ResultSetMetaData rsmd = (ResultSetMetaData) this.rs.getMetaData();
-            List<Object> list = new ArrayList<Object>();
+            List<T> list = new ArrayList<T>();
             while(rs.next()){
-                Object bean = beanClass.newInstance();
+                T bean = beanClass.newInstance();
                 for(int i = 1; i <= rsmd.getColumnCount(); i++){
 	        	if(rsmd.getColumnType(i) == SQL_BLOB_CONSTANT){ 
 	        		BeanUtils.setProperty(bean, rsmd.getColumnName(i).toLowerCase(), rs.getBytes(rsmd.getColumnName(i)));
