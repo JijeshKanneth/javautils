@@ -16,14 +16,14 @@ import com.hp.gagawa.java.elements.Thead;
 import com.hp.gagawa.java.elements.Tr;
 import javautils.ReflectWrapper;
 
-public class Grid {
+public class Grid<T> {
 	private static ReflectWrapper rw = new ReflectWrapper();
 	private static final String GETTER_PREFIX = "get";
 	private Table table;
-	private List<?> beans;
+	private List<T> beans;
 	private String [] columnNames;
 	private String [] getters;
-	private Hashtable<String, CellDefinition> additionalColumns;
+	private Hashtable<String, CellDefinition<T>> additionalColumns;
 	
 	public Grid(String id){
 		this(id,null);
@@ -59,18 +59,18 @@ public class Grid {
 		this.table.setCellspacing(spacing);
 	}
 	
-	public void bindSource(List<?> beans, String [] getters){
+	public void bindSource(List<T> beans, String [] getters){
 		bindSource(beans, null, getters);
 	}
 	
-	public void bindSource(List<?> beans, String [] columnNames, String [] getters){
+	public void bindSource(List<T> beans, String [] columnNames, String [] getters){
 		this.beans = beans;
 		this.columnNames = columnNames;
 		this.getters = getters;
 	}
 	
-	public void setAdditionalColDef(String name, CellDefinition definition){
-		if(null == this.additionalColumns) this.additionalColumns = new Hashtable<String, CellDefinition>();
+	public void setAdditionalColDef(String name, CellDefinition<T> definition){
+		if(null == this.additionalColumns) this.additionalColumns = new Hashtable<String, CellDefinition<T>>();
 		this.additionalColumns.put(name, definition);
 	}
 	
@@ -97,7 +97,7 @@ public class Grid {
 			Tr row = new Tr();
 			tbody.appendChild(row);
 		}else{
-			for(Object obj : this.beans){
+			for(T obj : this.beans){
 				Tr row = new Tr();
 				for(String getter : this.getters){
 					Td cell = new Td();
@@ -105,9 +105,8 @@ public class Grid {
 					row.appendChild(cell);
 				}
 				if(null != this.additionalColumns){
-					List<Object> values = new ArrayList<Object>(this.additionalColumns.values());
-					for(Object value : values){
-						CellDefinition definition = (CellDefinition) value;
+					List<CellDefinition<T>> values = new ArrayList<CellDefinition<T>>(this.additionalColumns.values());
+					for(CellDefinition<T> definition : values){
 						Td cell = new Td();
 						cell.appendText( (null != definition ? definition.define(obj) : "") );
 						row.appendChild(cell);		
